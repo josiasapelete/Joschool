@@ -50,44 +50,7 @@ module.exports.deleteUser = async (req, res) => {
     }
 }
 
-// //Follow
-// module.exports.follow = async (req, res) => {
-//     if (
-//         !ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idTofollow)) return res.status(400).send('ID unknown first: ' + req.params.id);
-//     try {
-//         await userModel.findByIdAndUpdate(
-//             req.params.id,
-//             {
-//                 $addToSet: { following: req.params.idTofollow }
-//             },
-//             { new: true, upsert: true }
-                
-//         ).then((data) => res.send(data))
-//         .catch((err) => res.status(500).send({ message: err }));
-//         //Permet de voir les a 
-//         await userModel.findByIdAndUpdate(
-//             req.params.idTofollow, {
-//             $addToSet: {
-//                 followers: req.params.id
-//             }
-//         },
-//             { new: true, upsert: true }
-                
-//         ).then((data) => res.send(data))
-//         .catch((err) => res.status(500).send({ message: err }))
-//     } catch (error) {
-//         return res.status(500).json({ message: error });
-//     }
-// }
-// //unFollow
-// module.exports.unfollow = async (req, res) => {
-//     if (!ObjectID.isValid(req.params.id)) return res.status(400).send('ID unknown : ' + req.params.id);
-//     try {
 
-//     } catch (error) {
-//         return res.status(500).json({ message: error });
-//     }
-// }
 
 //Follow
 module.exports.follow= async (req,res)=>{
@@ -106,33 +69,9 @@ module.exports.follow= async (req,res)=>{
                  res.status(200).json("User followed");
                 console.log("COOL")
             } else{
-                res.status(403).json("You are already following ")
-            }
-        } catch (error) {
-            return res.status(500).json({ message: error.message });
-            
-        }
-    }
-}
-
-
-//unFollow
-module.exports.unfollow= async (req,res)=>{
-    const id =req.params.id;
-    const {currentUserId}=req.body;
-    if(currentUserId===id){
-        res.status(403).json("Action forbidden")
-    } else{
-        try {
-            const unfollowUser= await UserModal.findById(id);
-            const unfollowingUser= await UserModal.findById(currentUserId);
-
-            if(unfollowUser.followers.includes(currentUserId)){
-                await unfollowUser.updateOne({$pull:{followers:currentUserId}});
-                await unfollowingUser.updateOne({$pull:{followings:id}});
+                await followUser.updateOne({$pull:{followers:currentUserId}});
+                await followingUser.updateOne({$pull:{followings:id}});
                 res.status(200).json("User unfollowed");
-            } else{
-                res.status(403).json("You are not following ")
             }
         } catch (error) {
             return res.status(500).json({ message: error.message });
@@ -140,3 +79,5 @@ module.exports.unfollow= async (req,res)=>{
         }
     }
 }
+
+

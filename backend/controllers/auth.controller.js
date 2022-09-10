@@ -1,14 +1,19 @@
 const userModel=require('../models/user.model');
 const jwt=require('jsonwebtoken');
-const bcrypt=require('bcrypt')
+const bcrypt=require('bcrypt');
+const { signUpErrors, signInErrors } = require('../utils/errors.utils');
+
+
 module.exports.signUp= async (req,res)=>{
     const {pseudo,email,password}=req.body ;
+    
     try{
         const user=await userModel.create({pseudo,email,password});
         res.status(201).json({user:user._id});
     }
-    catch(err){
-        res.status(200).send({err});
+    catch(error){
+        const errors= signUpErrors(error);
+        res.status(200).send({errors});
     }
 }
 
@@ -35,7 +40,8 @@ module.exports.login= async (req,res)=>{
             res.status(404).json("User does'nt exist");
         }
     } catch (error) {
-        res.status(500).json({message:error.message})
+        // const errors= signInErrors(error)
+        res.status(500).json({error})
         
     }
 }

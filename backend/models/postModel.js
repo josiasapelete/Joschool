@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PostSchema= mongoose.Schema(
+const PostSchema=new mongoose.Schema(
     {
        userId:{
         type: String,
@@ -32,7 +32,7 @@ const PostSchema= mongoose.Schema(
         ],required:true
        }
     },{
-        timestamp:true
+        timestamps:true
     }
 )
 

@@ -59,3 +59,27 @@ module.exports.deletePost =async (req,res) => {
     }
 }
 
+module.exports.like= async (req,res)=>{
+    const postId= req.params.id;
+    const {userId}=req.body;
+    if(!ObjectID.isValid(postId)){
+        console.log("Unknow post Id : "+ postId )
+    }
+    try {
+        
+        const post=await postModel.findById(postId);
+        const liker=await userModel.findById(userId);
+    
+        if(!post.likers.includes(userId)){
+            await post.updateOne({$push:{likers:userId}});
+            await liker.updateOne({$push:{likes:postId}});
+            res.status(200).json("Post liked successfully")
+        }else{
+            await post.updateOne({$pull:{likers:userId}});
+            await liker.updateOne({$pull:{likes:postId}});
+            res.status(200).json("Post unliked successfully")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}

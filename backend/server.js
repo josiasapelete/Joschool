@@ -7,7 +7,19 @@ const cookieParser= require('cookie-parser');
 const PORT=process.env.PORT;
 require('./config/db');
 const { checkUser, requireAuth } = require('./middlewares/auth.middleware');
+const cors=require('cors');
 const app=express();
+
+const corsOptions={
+    origin:process.env.CLIENT_URL,
+    Credential:true,
+    'allowedHeaders':['sessionId','content-Type'],
+    'exposeHeaders':['sessionId'],
+    'methods':'GET,HEAD,PUT,PATCH,POST,DELETE',
+    'preflightContinue':false
+}
+
+app.use(cors({corsOptions}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}))

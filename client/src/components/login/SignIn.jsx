@@ -14,6 +14,8 @@ const handleSubmit = (e)=>{
     e.preventDefault() ;
     const emailError= document.querySelector('.email .Error');
     const pwError= document.querySelector('.pwError');
+    const test= document.querySelector('.test');
+    
 // var data = JSON.stringify({
 //   "pseudo": "test",
 //   "email": "test@gmail.com",
@@ -28,19 +30,23 @@ var config = {
 };
 
 axios(config)
-.then(function (res) {
-  if(res.data.errors){
+.then( (res) =>{
+  if(res.status===400){
     emailError.innerHTML=JSON.stringify(res.data);
-    pwError.innerHTML=res.data;
+    // pwError.innerHTML=res.data;
+    console.log("ayi")
   } else{
-    window.location='accueil';
-	console.log(JSON.stringify(res.data));
+    // window.location='accueil';
+	// console.log(JSON.stringify(res.data));
   console.log(res)
+  pwError.innerHTML=res.data.token
     
   }
 })
 .catch(function (error) {
-	console.log(error);
+	console.log(error.message);
+  pwError.innerHTML="Holala";
+
 });
 }
     return (

@@ -12,7 +12,7 @@ const app=express();
 
 const corsOptions={
     origin:process.env.CLIENT_URL,
-    Credential:true,
+    credentials:true,
     'allowedHeaders':['sessionId','content-Type'],
     'exposeHeaders':['sessionId'],
     'methods':'GET,HEAD,PUT,PATCH,POST,DELETE',
